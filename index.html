@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Boost Pages — Feature Planning Board</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@300;400;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --os-black:    #1c1c1e;
+    --os-teal:     #1b6b7b;
+    --os-midteal:  #4a9fa8;
+    --os-mint:     #8ecfc9;
+    --os-cream:    #e8dfc0;
+    --os-amber:    #d4883a;
+    --os-burnt:    #c45e2a;
+    --os-terra:    #a83820;
+    --os-red:      #8a2010;
+    --bg:          #c8bfb0;
+    --bg2:         #bdb3a4;
+    --card-bg:     #ffffff;
+    --card-shadow: 0 2px 8px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.06);
+    --card-shadow-hover: 0 8px 24px rgba(0,0,0,0.15), 0 2px 6px rgba(0,0,0,0.08);
+    --text:        #1c1c1e;
+    --text-2:      #5a5248;
+    --text-3:      #9a9088;
+    --border:      rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Nunito Sans', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  header {
+    background: var(--os-black);
+    padding: 28px 40px 24px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+    flex-wrap: wrap;
+  }
+  .header-left h1 {
+    font-family: 'Nunito', sans-serif;
+    font-size: 24px;
+    font-weight: 900;
+    letter-spacing: -0.5px;
+    color: #fff;
+    line-height: 1;
+  }
+  .header-left h1 span { color: var(--os-amber); }
+  .header-left p {
+    margin-top: 7px;
+    font-size: 11px;
+    color: var(--os-mint);
+    letter-spacing: 0.8px;
+    font-weight: 400;
+    text-transform: uppercase;
+  }
+  .header-right {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+  .counter-pill {
+    font-size: 11px;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.6);
+    background: rgba(255,255,255,0.07);
+    font-weight: 600;
+  }
+  .counter-pill strong { color: var(--os-amber); }
+
+  /* ── ACTION BUTTONS ── */
+  .action-btn {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 6px 16px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.2px;
+  }
+  .btn-save {
+    background: var(--os-amber);
+    color: #fff;
+  }
+  .btn-save:hover { background: var(--os-burnt); }
+
+  .btn-load {
+    background: rgba(255,255,255,0.1);
+    color: rgba(255,255,255,0.8);
+    border: 1.5px solid rgba(255,255,255,0.2);
+  }
+  .btn-load:hover { background: rgba(255,255,255,0.18); color: #fff; }
+
+  .btn-reset {
+    background: transparent;
+    color: rgba(255,255,255,0.35);
+    border: 1.5px solid rgba(255,255,255,0.1);
+  }
+  .btn-reset:hover {
+    background: rgba(168,56,32,0.3);
+    color: rgba(255,255,255,0.7);
+    border-color: var(--os-terra);
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--os-black);
+    color: var(--os-mint);
+    font-size: 12px;
+    font-weight: 700;
+    padding: 10px 22px;
+    border-radius: 20px;
+    border: 1px solid rgba(142,207,201,0.25);
+    opacity: 0;
+    transition: all 0.25s ease;
+    pointer-events: none;
+    z-index: 1000;
+    letter-spacing: 0.3px;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+
+  /* ── FILTERS ── */
+  .filters {
+    padding: 14px 40px;
+    display: flex;
+    gap: 7px;
+    flex-wrap: wrap;
+    background: var(--os-teal);
+    align-items: center;
+  }
+  .filter-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    align-self: center;
+    margin-right: 4px;
+    letter-spacing: 1px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .filter-btn {
+    font-family: 'Nunito Sans', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 5px 14px;
+    border-radius: 20px;
+    border: 1.5px solid rgba(255,255,255,0.25);
+    background: transparent;
+    color: rgba(255,255,255,0.75);
+    cursor: pointer;
+    transition: all 0.15s;
+    letter-spacing: 0.2px;
+  }
+  .filter-btn:hover { border-color: #fff; color: #fff; background: rgba(255,255,255,0.12); }
+  .filter-btn.active { background: var(--os-amber); border-color: var(--os-amber); color: #fff; }
+
+  /* ── BOARD ── */
+  .board {
+    display: flex;
+    gap: 0;
+    padding: 24px 16px 40px;
+    overflow-x: auto;
+    min-height: calc(100vh - 160px);
+    align-items: flex-start;
+  }
+
+  /* ── COLUMN ── */
+  .col {
+    flex: 0 0 268px;
+    min-width: 268px;
+    margin: 0 8px;
+    border-radius: 14px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+    transition: box-shadow 0.2s;
+  }
+  .col.drag-over {
+    box-shadow: 0 0 0 3px var(--os-amber), 0 4px 20px rgba(0,0,0,0.2) !important;
+  }
+
+  .col-inbox  { --col-accent: var(--os-teal);    --col-light: #e8f4f5; }
+  .col-t1     { --col-accent: #3a8a3a;           --col-light: #eaf4ea; }
+  .col-t2     { --col-accent: var(--os-amber);   --col-light: #fdf3e6; }
+  .col-t3     { --col-accent: var(--os-burnt);   --col-light: #faeee7; }
+  .col-later  { --col-accent: var(--os-midteal); --col-light: #e6f3f4; }
+  .col-drop   { --col-accent: var(--os-terra);   --col-light: #f5e8e6; }
+
+  .col-head {
+    padding: 16px 16px 14px;
+    background: var(--col-accent);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .col-title {
+    font-family: 'Nunito', sans-serif;
+    font-size: 13px;
+    font-weight: 900;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
+    color: #fff;
+    flex: 1;
+  }
+  .col-count {
+    font-size: 12px;
+    font-weight: 800;
+    color: rgba(255,255,255,0.7);
+    min-width: 20px;
+    text-align: right;
+  }
+  .col-subtitle {
+    padding: 9px 16px 10px;
+    font-size: 11px;
+    color: var(--col-accent);
+    background: var(--col-light);
+    line-height: 1.4;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0,0,0,0.06);
+  }
+  .col-body {
+    padding: 10px 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 140px;
+    flex: 1;
+    background: var(--bg2);
+  }
+
+  /* ── CARD ── */
+  .card {
+    background: var(--card-bg);
+    border-radius: 10px;
+    padding: 12px 14px 11px;
+    cursor: grab;
+    user-select: none;
+    transition: all 0.15s;
+    position: relative;
+    box-shadow: var(--card-shadow);
+    border: 1px solid rgba(0,0,0,0.05);
+    animation: cardIn 0.22s ease both;
+  }
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .card:hover { box-shadow: var(--card-shadow-hover); transform: translateY(-2px); }
+  .card.dragging { opacity: 0.35; cursor: grabbing; transform: scale(0.97); }
+
+  .card-top { display: flex; align-items: flex-start; gap: 8px; margin-bottom: 5px; }
+  .card-num {
+    font-size: 9.5px; color: var(--text-3); flex-shrink: 0;
+    margin-top: 3px; font-weight: 700; letter-spacing: 0.5px; min-width: 30px;
+  }
+  .card-name {
+    font-family: 'Nunito', sans-serif; font-size: 15.5px; font-weight: 800;
+    color: var(--text); line-height: 1.25; flex: 1; letter-spacing: -0.2px;
+  }
+  .card-desc {
+    font-size: 11px; color: var(--text-2); line-height: 1.5;
+    margin-bottom: 9px; padding-left: 38px; font-weight: 400;
+  }
+  .card-foot { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; padding-left: 38px; }
+
+  .tag { font-size: 9.5px; padding: 2px 8px; border-radius: 10px; font-weight: 700; letter-spacing: 0.2px; text-transform: uppercase; }
+  .tag-conv    { background: #d6efd6; color: #2a6a2a; }
+  .tag-engage  { background: #d6e8f5; color: #1a5a8a; }
+  .tag-nurture { background: #f5e6d6; color: #8a3a0a; }
+  .tag-measure { background: #d6f0ee; color: #1a6a66; }
+  .tag-trust   { background: #f0ecd6; color: #6a5a0a; }
+  .tag-tech    { background: #ead6e8; color: #6a1a6a; }
+  .tag-content { background: #d6e8d8; color: #1a5a2a; }
+  .tag-ai1     { background: #fff0d8; color: #8a4800; }
+  .tag-ai2     { background: #ede0f5; color: #5a1a8a; }
+  .tag-ai3     { background: #d8eef5; color: #0a5a7a; }
+
+  .cost-tag {
+    font-size: 9.5px; padding: 2px 8px; border-radius: 10px;
+    background: #f2ede8; color: var(--text-3);
+    border: 1px solid rgba(0,0,0,0.08); font-weight: 600;
+  }
+  .ai-badge {
+    font-size: 8.5px; padding: 2px 7px; border-radius: 6px;
+    background: linear-gradient(135deg, var(--os-amber), var(--os-terra));
+    color: #fff; font-weight: 900; letter-spacing: 0.8px;
+    position: absolute; top: 10px; right: 10px; text-transform: uppercase;
+  }
+
+  .empty-state {
+    border: 2px dashed rgba(0,0,0,0.12); border-radius: 10px;
+    padding: 22px 12px; text-align: center; color: var(--text-3);
+    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
+    background: rgba(255,255,255,0.3);
+  }
+
+  ::-webkit-scrollbar { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: rgba(0,0,0,0.2); border-radius: 3px; }
+
+  .card.hidden { display: none; }
+
+  /* hidden file input */
+  #file-input { display: none; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <h1>Sales Boost Pages <span>/ Feature Board</span></h1>
+    <p>Drag cards to build your tier structure &amp; decide what ships when</p>
+  </div>
+  <div class="header-right">
+    <div class="counter-pill">Total <strong id="total-count">45</strong></div>
+    <div class="counter-pill">Unplaced <strong id="inbox-count">45</strong></div>
+    <div class="counter-pill">Placed <strong id="placed-count">0</strong></div>
+    <button class="action-btn btn-save" onclick="exportLayout()">⬇ Save Layout</button>
+    <button class="action-btn btn-load" onclick="document.getElementById('file-input').click()">⬆ Load Layout</button>
+    <button class="action-btn btn-reset" onclick="resetBoard()">↺ Reset</button>
+    <input type="file" id="file-input" accept=".json" onchange="importLayout(event)">
+  </div>
+</header>
+
+<div class="filters">
+  <span class="filter-label">Filter:</span>
+  <button class="filter-btn active" onclick="filterCards(this,'all')">All</button>
+  <button class="filter-btn" onclick="filterCards(this,'conv')">Convert</button>
+  <button class="filter-btn" onclick="filterCards(this,'engage')">Engage</button>
+  <button class="filter-btn" onclick="filterCards(this,'nurture')">Nurture</button>
+  <button class="filter-btn" onclick="filterCards(this,'measure')">Measure</button>
+  <button class="filter-btn" onclick="filterCards(this,'trust')">Trust</button>
+  <button class="filter-btn" onclick="filterCards(this,'tech')">Technical</button>
+  <button class="filter-btn" onclick="filterCards(this,'content')">Content</button>
+  <button class="filter-btn" onclick="filterCards(this,'ai1')">⚡ AI Genius</button>
+  <button class="filter-btn" onclick="filterCards(this,'ai2')">AI Strong</button>
+  <button class="filter-btn" onclick="filterCards(this,'ai3')">AI Polish</button>
+</div>
+
+<div class="board">
+
+  <div class="col col-inbox" id="col-inbox" ondragover="onDragOver(event)" ondrop="onDrop(event,'inbox')" ondragleave="onDragLeave(event)">
+    <div class="col-head">
+      <div class="col-title">Unplaced</div>
+      <div class="col-count" id="count-inbox">45</div>
+    </div>
+    <div class="col-subtitle">All 45 features. Drag each to its tier or fate.</div>
+    <div class="col-body" id="body-inbox"></div>
+  </div>
+
+  <div class="col col-t1" id="col-t1" ondragover="onDragOver(event)" ondrop="onDrop(event,'t1')" ondragleave="onDragLeave(event)">
+    <div class="col-head">
+      <div class="col-title">Spotlight</div>
+      <div class="col-count" id="count-t1">0</div>
+    </div>
+    <div class="col-subtitle">Tier 1 · $2.5k–$3.2k · Core entry offer</div>
+    <div class="col-body" id="body-t1"><div class="empty-state">Drop features here</div></div>
+  </div>
+
+  <div class="col col-t2" id="col-t2" ondragover="onDragOver(event)" ondrop="onDrop(event,'t2')" ondragleave="onDragLeave(event)">
+    <div class="col-head">
+      <div class="col-title">Spotlight Pro</div>
+      <div class="col-count" id="count-t2">0</div>
+    </div>
+    <div class="col-subtitle">Tier 2 · $3.8k–$4.8k · Hero + nurture</div>
+    <div class="col-body" id="body-t2"><div class="empty-state">Drop features here</div></div>
+  </div>
+
+  <div class="col col-t3" id="col-t3" ondragover="onDragOver(event)" ondrop="onDrop(event,'t3')" ondragleave="onDragLeave(event)">
+    <div class="col-head">
+      <div class="col-title">Spotlight Funnel</div>
+      <div class="col-count" id="count-t3">0</div>
+    </div>
+    <div class="col-subtitle">Tier 3 · $5.5k–$6.8k · Full funnel engine</div>
+    <div class="col-body" id="body-t3"><div class="empty-state">Drop features here</div></div>
+  </div>
+
+  <div class="col col-later" id="col-later" ondragover="onDragOver(event)" ondrop="onDrop(event,'later')" ondragleave="onDragLeave(event)">
+    <div class="col-head">
+      <div class="col-title">Phase 2</div>
+      <div class="col-count" id="count-later">0</div>
+    </div>
+    <div class="col-subtitle">Good idea — build after launch</div>
+    <div class="col-body" id="body-later"><div class="empty-state">Drop features here</div></div>
+  </div>
+
+  <div class="col col-drop" id="col-drop" ondragover="onDragOver(event)" ondrop="onDrop(event,'drop')" ondragleave="onDragLeave(event)">
+    <div class="col-head">
+      <div class="col-title">Not This Offer</div>
+      <div class="col-count" id="count-drop">0</div>
+    </div>
+    <div class="col-subtitle">Cut — doesn't fit SBP core offer</div>
+    <div class="col-body" id="body-drop"><div class="empty-state">Drop features here</div></div>
+  </div>
+
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const features = [
+  { id:'f1',  num:'A-01', name:'Lead Capture Form',               cat:'conv',    cost:'Free',     desc:'Name + email + optional fields. Posts to webhook or CRM.' },
+  { id:'f2',  num:'A-02', name:'Lead Magnet Delivery',            cat:'conv',    cost:'Free',     desc:'Auto-email sends PDF/guide after form submit.' },
+  { id:'f3',  num:'A-03', name:'Multi-Step Quiz Funnel',          cat:'conv',    cost:'Low',      desc:'2–5 step interactive quiz that qualifies before capturing.' },
+  { id:'f4',  num:'A-04', name:'Exit-Intent Popup',               cat:'conv',    cost:'Free',     desc:'Last-chance offer shown when cursor moves to leave page.' },
+  { id:'f5',  num:'A-05', name:'Sticky CTA Bar',                  cat:'conv',    cost:'Free',     desc:'Fixed CTA always visible as visitor scrolls.' },
+  { id:'f6',  num:'B-01', name:'AI Chatbot (FAQ + Qualifier)',    cat:'engage',  cost:'Medium',   desc:'Chatbot trained on FAQ. Qualifies intent, books calls.' },
+  { id:'f7',  num:'B-02', name:'Booking / Calendar Integration',  cat:'engage',  cost:'Low',      desc:'Embedded Calendly / Cal.com. Visitor books directly.' },
+  { id:'f8',  num:'B-03', name:'Video Testimonial Section',       cat:'engage',  cost:'Free',     desc:'Embedded video testimonials. Lightbox or inline.' },
+  { id:'f9',  num:'B-04', name:'Interactive Pricing Calculator',  cat:'engage',  cost:'Free',     desc:'Sliders/dropdowns to estimate price. Pure JS.' },
+  { id:'f10', num:'B-05', name:'Before / After Slider',           cat:'engage',  cost:'Free',     desc:'Draggable comparison showing transformation results.' },
+  { id:'f11', num:'B-06', name:'Countdown / Urgency Timer',       cat:'engage',  cost:'Free',     desc:'Animated countdown to launch, offer expiry, or scarcity.' },
+  { id:'f12', num:'C-01', name:'Auto Follow-Up Email Sequence',   cat:'nurture', cost:'Low',      desc:'3–5 email drip triggered by form submission.' },
+  { id:'f13', num:'C-02', name:'SMS / WhatsApp Notification',     cat:'nurture', cost:'Medium',   desc:'Instant lead alert to client phone via Twilio.' },
+  { id:'f14', num:'C-03', name:'CRM Integration',                 cat:'nurture', cost:'Low',      desc:'Leads auto-populate HubSpot, Pipedrive, Notion, Airtable.' },
+  { id:'f15', num:'C-04', name:'Retargeting Pixel Setup',         cat:'nurture', cost:'Free',     desc:'Meta Pixel, Google Ads tag, LinkedIn Insight tag.' },
+  { id:'f16', num:'D-01', name:'Analytics Dashboard',             cat:'measure', cost:'Free',     desc:'GA4 or Plausible. Visitors, conversions, sources.' },
+  { id:'f17', num:'D-02', name:'Heatmaps + Session Recordings',   cat:'measure', cost:'Free',     desc:'Microsoft Clarity (free). Click maps, scroll depth, replays.' },
+  { id:'f18', num:'D-03', name:'Conversion Event Tracking',       cat:'measure', cost:'Free',     desc:'Custom events on form submit, CTA click, scroll milestones.' },
+  { id:'f19', num:'D-04', name:'Monthly Performance Report',      cat:'measure', cost:'Retainer', desc:'AI-generated monthly report: traffic, conversions, insights.' },
+  { id:'f20', num:'D-05', name:'A/B Testing',                     cat:'measure', cost:'Medium',   desc:'Test headline, CTA, or layout variants.' },
+  { id:'f21', num:'E-01', name:'Social Proof Widgets',            cat:'trust',   cost:'Free',     desc:'Google stars, trust badges, logo bar, "as seen in."' },
+  { id:'f22', num:'E-02', name:'Case Study / Results Section',    cat:'trust',   cost:'Free',     desc:'Structured results: problem → solution → outcome.' },
+  { id:'f23', num:'E-03', name:'FAQ Accordion',                   cat:'trust',   cost:'Free',     desc:'Expandable Q&A with FAQ schema for SEO.' },
+  { id:'f24', num:'F-01', name:'SEO Fundamentals',                cat:'tech',    cost:'Free',     desc:'Meta, OG tags, schema markup, sitemap.' },
+  { id:'f25', num:'F-02', name:'Page Speed Optimisation',         cat:'tech',    cost:'Free',     desc:'Compression, lazy load, minified assets. Lighthouse 90+.' },
+  { id:'f26', num:'F-03', name:'Accessibility Baseline',          cat:'tech',    cost:'Free',     desc:'WCAG 2.1 AA: semantic HTML, alt text, keyboard nav.' },
+  { id:'f27', num:'F-04', name:'SSL + Security Headers',          cat:'tech',    cost:'Free',     desc:'Auto HTTPS via Cloudflare. CSP, X-Frame headers.' },
+  { id:'f28', num:'G-01', name:'Sales One-Pager (Web Page)',      cat:'content', cost:'Low',      desc:'Standalone page for outreach leave-behinds and DMs.' },
+  { id:'f29', num:'G-02', name:'Social Share Cards + OG Images',  cat:'content', cost:'Free',     desc:'Custom branded preview images for link sharing.' },
+  { id:'f30', num:'G-03', name:'AI-Generated Ad Copy',            cat:'content', cost:'Low',      desc:'3–5 Meta/Google ad variants aligned to page messaging.' },
+  { id:'f31', num:'G-04', name:'Social Media Launch Kit',         cat:'content', cost:'Low',      desc:'5–10 social posts + image templates for page launch.' },
+  { id:'ai1', num:'AI-1', name:'The Self-Optimising Page',        cat:'ai1', cost:'Medium',  ai:true, desc:'Page mutates itself. AI A/B testing. Converges on best version after 200–500 visitors.' },
+  { id:'ai2', num:'AI-2', name:'Source-Aware Hero Adaptation',    cat:'ai1', cost:'Medium',  ai:true, desc:'AI rewrites headline + hero based on UTM/referrer. Same URL, infinite variants.' },
+  { id:'ai3', num:'AI-3', name:'Always-On Co-Pilot Chatbot',      cat:'ai1', cost:'Medium',  ai:true, desc:'AI sales rep. Qualifies, books calls, SMS hot leads, writes CRM notes + follow-ups.' },
+  { id:'ai4', num:'AI-4', name:'Visitor Intent Scoring + Alerts', cat:'ai1', cost:'Medium',  ai:true, desc:'Real-time intent score. SMS when threshold crossed: "She\'s on pricing. Call her."' },
+  { id:'ai5', num:'AI-5', name:'AI CRO Strategist (Monthly)',     cat:'ai1', cost:'Retainer', ai:true, desc:'AI ingests heatmaps + analytics → written CRO report. The retainer deliverable.' },
+  { id:'ai6', num:'AI-6', name:'Personalised Outreach Microsites',cat:'ai2', cost:'High',    ai:true, desc:'Unique page per prospect. AI writes in real time. CSV upload at scale.' },
+  { id:'ai7', num:'AI-7', name:'The Smart Qualifying Quiz',       cat:'ai2', cost:'Medium',  ai:true, desc:'AI-driven adaptive conversation. Pre-qualified CRM lead with summary note.' },
+  { id:'ai8', num:'AI-8', name:'AI Voice Agent Hand-Off',         cat:'ai2', cost:'High',    ai:true, desc:'"Call now" connects to on-brand AI voice agent. Qualifies + books 24/7.' },
+  { id:'ai9', num:'AI-9', name:'Dynamic Social Proof',            cat:'ai2', cost:'Low',     ai:true, desc:'AI picks most relevant testimonial per visitor. Right proof, right person.' },
+  { id:'ai10',num:'AI-10',name:'Auto-Generated Lead Magnet',      cat:'ai2', cost:'Medium',  ai:true, desc:'Visitor enters company name → AI generates personalised audit PDF in 60 seconds.' },
+  { id:'ai11',num:'AI-11',name:'Conversational Search',           cat:'ai3', cost:'Low',     ai:true, desc:'Natural language Q&A replacing FAQ accordion. Logs unanswered questions.' },
+  { id:'ai12',num:'AI-12',name:'AI-Optimised for LLM Discovery',  cat:'ai3', cost:'Free',    ai:true, desc:'Schema + structure so page gets cited by ChatGPT, Perplexity, Claude, Google AI.' },
+  { id:'ai13',num:'AI-13',name:'Predictive Exit-Intent Offers',   cat:'ai3', cost:'Low',     ai:true, desc:'AI reads behaviour → shows best exit offer. 2–3x more recoveries than static popups.' },
+  { id:'ai14',num:'AI-14',name:'Auto Follow-Up Sequences (AI)',   cat:'ai3', cost:'Low',     ai:true, desc:'AI writes personalised 3-email follow-up from what the lead actually said.' },
+];
+
+const catLabels = {
+  conv:'Convert', engage:'Engage', nurture:'Nurture',
+  measure:'Measure', trust:'Trust', tech:'Technical',
+  content:'Content', ai1:'AI Genius', ai2:'AI Strong', ai3:'AI Polish'
+};
+
+const COLS = ['inbox','t1','t2','t3','later','drop'];
+let dragId = null;
+let currentFilter = 'all';
+
+// ── TOAST ──
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ── MAKE CARD ──
+function makeCard(f) {
+  const card = document.createElement('div');
+  card.className = 'card';
+  card.id = 'card-' + f.id;
+  card.draggable = true;
+  card.dataset.cat = f.cat;
+  card.innerHTML = `
+    ${f.ai ? '<div class="ai-badge">AI</div>' : ''}
+    <div class="card-top">
+      <div class="card-num">${f.num}</div>
+      <div class="card-name">${f.name}</div>
+    </div>
+    <div class="card-desc">${f.desc}</div>
+    <div class="card-foot">
+      <span class="tag tag-${f.cat}">${catLabels[f.cat]}</span>
+      <span class="cost-tag">${f.cost}</span>
+    </div>
+  `;
+  card.addEventListener('dragstart', () => {
+    dragId = f.id;
+    setTimeout(() => card.classList.add('dragging'), 0);
+  });
+  card.addEventListener('dragend', () => {
+    card.classList.remove('dragging');
+    dragId = null;
+  });
+  return card;
+}
+
+// ── DRAG HANDLERS ──
+function onDragOver(e) {
+  e.preventDefault();
+  e.currentTarget.classList.add('drag-over');
+}
+function onDragLeave(e) {
+  e.currentTarget.classList.remove('drag-over');
+}
+function onDrop(e, colId) {
+  e.preventDefault();
+  e.currentTarget.classList.remove('drag-over');
+  if (!dragId) return;
+  const card = document.getElementById('card-' + dragId);
+  if (!card) return;
+  const body = document.getElementById('body-' + colId);
+  const empty = body.querySelector('.empty-state');
+  if (empty) empty.remove();
+  body.appendChild(card);
+  updateCounts();
+  applyFilter(currentFilter);
+  restoreEmptyStates();
+}
+
+// ── COUNTS ──
+function updateCounts() {
+  let placed = 0;
+  COLS.forEach(c => {
+    const n = document.getElementById('body-' + c).querySelectorAll('.card').length;
+    document.getElementById('count-' + c).textContent = n;
+    if (c !== 'inbox') placed += n;
+  });
+  document.getElementById('inbox-count').textContent =
+    document.getElementById('body-inbox').querySelectorAll('.card').length;
+  document.getElementById('placed-count').textContent = placed;
+}
+
+// ── EMPTY STATES ──
+function restoreEmptyStates() {
+  COLS.forEach(c => {
+    if (c === 'inbox') return;
+    const body = document.getElementById('body-' + c);
+    if (body.querySelectorAll('.card').length === 0 && !body.querySelector('.empty-state')) {
+      const e = document.createElement('div');
+      e.className = 'empty-state';
+      e.textContent = 'Drop features here';
+      body.appendChild(e);
+    }
+  });
+}
+
+// ── FILTER ──
+function filterCards(btn, cat) {
+  currentFilter = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  applyFilter(cat);
+}
+function applyFilter(cat) {
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
+  });
+}
+
+// ── EXPORT (Save Layout) ──
+function exportLayout() {
+  const layout = {};
+  COLS.forEach(c => {
+    layout[c] = Array.from(
+      document.getElementById('body-' + c).querySelectorAll('.card')
+    ).map(card => card.id.replace('card-', ''));
+  });
+  const json = JSON.stringify({ version: 1, savedAt: new Date().toISOString(), layout }, null, 2);
+  const blob = new Blob([json], { type: 'application/json' });
+  const url  = URL.createObjectURL(blob);
+  const a    = document.createElement('a');
+  a.href     = url;
+  a.download = 'sbp-feature-board.json';
+  a.click();
+  URL.revokeObjectURL(url);
+  showToast('✓ Layout saved as sbp-feature-board.json');
+}
+
+// ── IMPORT (Load Layout) ──
+function importLayout(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (!data.layout) throw new Error('Invalid file');
+      applyLayoutData(data.layout);
+      showToast('✓ Layout loaded successfully');
+    } catch(err) {
+      showToast('⚠ Could not read that file');
+    }
+  };
+  reader.readAsText(file);
+  // Reset input so same file can be reloaded
+  event.target.value = '';
+}
+
+function applyLayoutData(layout) {
+  // Move all cards back to inbox first
+  features.forEach(f => {
+    const card = document.getElementById('card-' + f.id);
+    if (card) document.getElementById('body-inbox').appendChild(card);
+  });
+  // Restore empty states
+  COLS.forEach(c => {
+    if (c === 'inbox') return;
+    const body = document.getElementById('body-' + c);
+    if (!body.querySelector('.empty-state')) {
+      const e = document.createElement('div');
+      e.className = 'empty-state';
+      e.textContent = 'Drop features here';
+      body.insertBefore(e, body.firstChild);
+    }
+  });
+  // Place cards per saved layout
+  COLS.forEach(c => {
+    if (!layout[c]) return;
+    const body = document.getElementById('body-' + c);
+    layout[c].forEach(id => {
+      const card = document.getElementById('card-' + id);
+      if (!card) return;
+      const empty = body.querySelector('.empty-state');
+      if (empty) empty.remove();
+      body.appendChild(card);
+    });
+  });
+  updateCounts();
+  applyFilter(currentFilter);
+  restoreEmptyStates();
+}
+
+// ── RESET ──
+function resetBoard() {
+  if (!confirm('Reset the board? All cards will return to Unplaced.')) return;
+  features.forEach(f => {
+    const card = document.getElementById('card-' + f.id);
+    if (card) document.getElementById('body-inbox').appendChild(card);
+  });
+  restoreEmptyStates();
+  updateCounts();
+  showToast('↺ Board reset');
+}
+
+// ── INIT ──
+const inbox = document.getElementById('body-inbox');
+features.forEach(f => inbox.appendChild(makeCard(f)));
+updateCounts();
+</script>
+</body>
+</html>
